@@ -11,7 +11,6 @@ format:
     height: 900
     slide-level: 2
     footer: "M08 Reflection | Cal Poly Pomona"
-    logo: project-mark.svg
     transition: slide
     transition-speed: default
     incremental: false
@@ -96,7 +95,7 @@ The biggest benefit for me is having more time to explain what the results mean,
 > **Essay Prompt 2.1.** In Step 2, you watched the extended presentation of the `{gtsummary}` package by Dr. Daniel Sjoberg, the creator of the package. How does it differ from `gt` and `gtExtras`?
 
 | Package | What I would use it for |
-|:-----------------------------------|:-----------------------------------|
+|:---|:---|
 | **`gtsummary`** | Creating descriptive statistics, cross-tabulations, hypothesis-test results, and regression tables directly from data or fitted models. |
 | **`gt`** | Formatting a table, such as adjusting its headings, column layout, and appearance. |
 | **`gtExtras`** | Adding extra visual elements and styling to a `gt` table. |
