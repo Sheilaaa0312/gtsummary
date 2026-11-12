@@ -1,0 +1,19 @@
+/* Modest formatting changes to Quarto's built-in serif RevealJS theme. */
+.reveal { color: #25394b; }
+.reveal h1, .reveal h2 { color: #173752; text-transform: none; }
+.reveal h2 { font-size: 1.45em; }
+.reveal p, .reveal li { line-height: 1.35; }
+.reveal blockquote {
+  width: 94%;
+  margin: 0 0 0.9em 0;
+  padding: 0.5em 0.85em;
+  border-left: 4px solid #7d9bb0;
+  background: #f5f7fa;
+  box-shadow: none;
+  font-size: 0.87em;
+}
+.reveal .column { padding-right: 0.45em; }
+.reveal table { font-size: 0.76em; }
+.reveal pre { font-size: 0.59em; }
+.reveal pre code { max-height: 540px; }
+.reveal .slide-number { font-weight: 600; }

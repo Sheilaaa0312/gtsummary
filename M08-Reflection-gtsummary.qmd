@@ -1,0 +1,297 @@
+---
+title: "Summary Tables with gtsummary"
+subtitle: "M08 Reflection"
+author: "Xueying Luo"
+institute: "MS in Digital Marketing, Cal Poly Pomona"
+date: "2026-11-11"
+format:
+  revealjs:
+    theme: serif
+    width: 1600
+    height: 900
+    slide-level: 2
+    footer: "M08 Reflection | Cal Poly Pomona"
+    logo: project-mark.svg
+    transition: slide
+    transition-speed: default
+    incremental: false
+    toc: true
+    toc-depth: 1
+    slide-number: true
+    scrollable: true
+    smaller: true
+    code-fold: false
+    code-overflow: wrap
+    number-sections: false
+    embed-resources: true
+    css: styles.css
+editor: visual
+execute:
+  echo: true
+  warning: false
+  message: false
+  freeze: auto
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(tidyverse)
+library(gtsummary)
+library(gt)
+```
+
+## 1. What I learned from Dr. Jung's lecture
+
+> **Essay Prompt 1.** In Step 1, you have seen how to create a summary table and modify it for various statistical analyses. Summarize the package's capabilities as explained by the speaker. How may the `{gtsummary}` benefit you for your school work or career?
+
+Before this lecture, I mostly thought of a statistical table as something I would format after finishing the analysis. Dr. Jung's examples showed me a better workflow: I can create the analysis and the table together in R, then make changes without rebuilding everything by hand.
+
+For example, his `trial` dataset included both numerical and categorical variables. With `tbl_summary()`, he produced a table showing medians and percentages without calculating and arranging every value separately. He then used other functions to compare groups and present the results more clearly.
+
+## 1. What the package can do
+
+::::::: columns
+:::: {.column width="50%"}
+**Summaries and group comparisons**
+
+::: incremental
+- `tbl_summary()` gives counts, percentages, medians, or means.
+- `add_p()` adds statistical tests to group comparisons.
+- `add_difference()` adds differences, confidence intervals, and p-values.
+- `tbl_cross()` produces a cross-tabulation for two categorical variables.
+:::
+::::
+
+:::: {.column width="50%"}
+**Regression and table formatting**
+
+::: incremental
+- `tbl_regression()` presents linear or logistic regression results.
+- `tbl_uvregression()` puts separate one-predictor models into one table.
+- `tbl_merge()` and `tbl_stack()` combine tables.
+- `as_gt()` lets us use `gt` to customize titles, headers, and other details.
+:::
+::::
+:::::::
+
+## 1. One detail I want to remember
+
+In one example, Dr. Jung changed a table to display mean (SD) instead of median (IQR). However, `add_p()` still used the default Wilcoxon test. Changing how the numbers appear did not change the test behind the table.
+
+That detail stood out to me because it would be easy to look at a clean table and assume the analysis was correct. I need to check whether the test matches the type of variable and what I am trying to compare. The lecture's use of `add_difference()` for a Welch two-sample t-test made this distinction much clearer.
+
+A table can look professional while still answering the wrong question. I need to check the analysis before worrying about the appearance.
+
+## 1. How I could use it for school and work
+
+For our PhD Orthodontics CEP project, we plan to analyze survey responses about website information, credibility, trust, and consultation intention. Once we collect those responses, I could use `tbl_summary()` to describe the answers, `tbl_cross()` for categorical comparisons, and `tbl_regression()` for relationships involving consultation intention.
+
+I also see a use for this beyond school. A marketing analyst might need to update a report every week or month. If the table is created from R code, I can rerun the analysis with updated data instead of copying results from the console into a document again.
+
+The biggest benefit for me is having more time to explain what the results mean, rather than spending that time fixing table formatting.
+
+## 2.1 Comparing `gtsummary`, `gt`, and `gtExtras`
+
+> **Essay Prompt 2.1.** In Step 2, you watched the extended presentation of the `{gtsummary}` package by Dr. Daniel Sjoberg, the creator of the package. How does it differ from `gt` and `gtExtras`?
+
+| Package | What I would use it for |
+|:---|:---|
+| **`gtsummary`** | Creating descriptive statistics, cross-tabulations, hypothesis-test results, and regression tables directly from data or fitted models. |
+| **`gt`** | Formatting a table, such as adjusting its headings, column layout, and appearance. |
+| **`gtExtras`** | Adding extra visual elements and styling to a `gt` table. |
+
+Sjoberg explained that `gtsummary` uses `gt` to display its tables. I think of `gtsummary` as the part that organizes the statistical results and `gt` as the part that helps present them. `gtExtras` is more focused on additional visual formatting; it does not replace the statistical functions in `gtsummary`.
+
+## 2.2 Three things I learned from Sjoberg
+
+> **Essay Prompt 2.2.** Give three things you learned newly that were not explained in the lecture in Step 1.
+
+**1. `inline_text()`**
+
+Sjoberg showed how to pull a value from a `gtsummary` table directly into a sentence, including a regression estimate, confidence interval, and p-value. This was new to me. I liked it because, if I update a model, I would not have to remember to replace the same numbers manually in my written explanation.
+
+**2. `tbl_strata()`**
+
+This function creates separate summary tables within different groups and combines the results. If our CEP survey eventually has enough responses from San Gabriel and Chino Hills, this could be useful for showing the results for each city in a consistent format.
+
+## 2.2 One more new idea
+
+**3. Different table output options**
+
+I had mainly been thinking about HTML tables. Sjoberg explained that `gtsummary` can also work with other table engines, such as `flextable` for Word documents and `huxtable` for LaTeX. I had not seen those options in Dr. Jung's Step 1 lecture.
+
+That matters because I might need to use the same analysis in different formats. For example, I might submit an HTML report for class but share a Word document with someone who wants to make comments.
+
+Sjoberg also explained why he created the package in the first place: making a reproducible report should not require a long round of manual table edits. That made the purpose of `gtsummary` easier for me to understand.
+
+## 3. Cross-tabulation with our CEP data
+
+> **Essay Prompt 3.** Apply what you learned to your MSDM CEP data. Choose two appropriate variables for cross-tabulation and show if the two variables are associated or not. Use appropriate statistics to test if the two variables are associated. Code, produce the table, and interpret the result.
+
+Our consumer survey does not yet have usable responses, so I used the actual GA4 export from the PhD Orthodontics website instead.
+
+I compared two categorical variables:
+
+- **Session medium:** Direct or Organic Search.
+- **Engagement status:** Engaged or Not engaged.
+
+The question is whether the proportion of engaged sessions differs between these two traffic sources. I used a Pearson chi-square test because both variables are categorical.
+
+## 3. Preparing the GA4 session counts {.smaller}
+
+The GA4 file has totals by traffic medium, rather than one row for every session. I used those reported counts to make the two-way table; I did not generate new survey responses.
+
+```{r}
+#| label: ga4-preparation
+#| echo: true
+ga4 <- read_csv("ga4_session_medium.csv", skip = 9,
+                show_col_types = FALSE)
+
+direct <- ga4 |> filter(`Session medium` == "(none)")
+organic <- ga4 |> filter(`Session medium` == "organic")
+
+ga4_sessions <- tibble(
+  medium = c(rep("Direct", direct$Sessions),
+             rep("Organic Search", organic$Sessions)),
+  engagement_status = c(
+    rep("Engaged", direct$`Engaged sessions`),
+    rep("Not engaged", direct$Sessions - direct$`Engaged sessions`),
+    rep("Engaged", organic$`Engaged sessions`),
+    rep("Not engaged", organic$Sessions - organic$`Engaged sessions`)
+  )
+)
+```
+
+## 3. Cross-tabulation and chi-square test {.smaller}
+
+```{r}
+#| label: ga4-cross-table
+#| results: asis
+ga4_sessions |>
+  tbl_cross(
+    row = medium,
+    col = engagement_status,
+    percent = "row"
+  ) |>
+  add_p(
+    test = "chisq.test",
+    test.args = list(correct = FALSE),
+    pvalue_fun = label_style_pvalue(digits = 3)
+  ) |>
+  bold_labels()
+```
+
+The table shows **counts and row percentages**, so each medium's percentages add to 100%. The `add_p()` function reports the chi-square p-value. I used the version without the continuity correction and checked that the expected cell counts were above five.
+
+## 3. What the GA4 results tell me
+
+- Direct: 14 out of 45 sessions were engaged (31.1%).
+- Organic Search: 14 out of 22 sessions were engaged (63.6%).
+- Chi-square test: χ²(1) = 6.43, p = 0.011.
+
+At the 5% significance level, I found an association between session medium and engagement status in these records. Organic Search sessions were more likely to be classified as engaged than Direct sessions.
+
+I would be careful about turning this into a marketing recommendation right away. The sample is small, one person could have several sessions, and our group has also been checking the accuracy of the website tracking. This result tells us what happened in the recorded sessions, not why it happened.
+
+## 4. Multiple regression with our CEP data
+
+> **Essay Prompt 4.** Using the MSDM CEP data, run multiple regression. The dependent variable can be continuous or dichotomous. Regress a dependent variable on a set of independent variables. Code, produce the table, and interpret the result.
+
+For this question, I used the Google Ads daily performance export from our PhD Orthodontics CEP project. I chose a multiple linear regression because the dependent variable is continuous.
+
+Dependent variable: Average daily cost per click (CPC), in US dollars.
+
+Independent variables:
+
+- Percentage of impressions shown at the absolute top of search results.
+- Number of daily impressions, measured in thousands.
+- Days since the first recorded date, to account for a possible change over time.
+
+I wanted to see how these three variables relate to CPC when they are included in the model together.
+
+## 4. Preparing the Google Ads data {.smaller}
+
+```{r}
+#| label: ads-preparation
+#| echo: true
+ads <- read_csv("google_ads_daily.csv", show_col_types = FALSE) |>
+  transmute(
+    day = as.Date(Day),
+    clicks = Clicks,
+    impressions_k = parse_number(as.character(`Impr.`)) / 1000,
+    absolute_top_pct = parse_number(as.character(`Impr. (Abs. Top) %`)),
+    avg_cpc = `Avg. CPC`
+  ) |>
+  filter(clicks > 0, !is.na(avg_cpc)) |>
+  mutate(elapsed_days = as.numeric(day - min(day)))
+```
+
+The export contains 107 reported dates from May 12 to October 13, 2026. I excluded the one day with zero clicks because an average CPC is not meaningful when there were no clicks. That leaves 106 daily records for the regression.
+
+## 4. Fitting the regression model {.smaller}
+
+```{r}
+#| label: ads-model
+#| echo: true
+ads_model <- lm(
+  avg_cpc ~ absolute_top_pct + impressions_k + elapsed_days,
+  data = ads
+)
+
+summary(ads_model)
+```
+
+This follows Dr. Jung's multiple-regression example using `lm()`. The coefficients show the association between each predictor and CPC while keeping the other predictors in the model.
+
+## 4. Regression table with `gtsummary` {.smaller}
+
+```{r}
+#| label: ads-regression-table
+#| results: asis
+ads_model |>
+  tbl_regression(
+    label = list(
+      absolute_top_pct ~ "Absolute-top impressions (%)",
+      impressions_k ~ "Daily impressions (thousands)",
+      elapsed_days ~ "Days since first record"
+    ),
+    pvalue_fun = label_style_pvalue(digits = 3)
+  ) |>
+  add_n() |>
+  bold_labels()
+```
+
+## 4. Interpreting the regression
+
+The model has an R-squared of 0.457, meaning it accounts for about 45.7% of the variation in daily average CPC in this dataset.
+
+- Absolute-top impressions: The coefficient is 0.125 (p \< 0.001). With the other variables held constant, a 10-percentage-point increase in this rate is associated with about \$1.25 higher CPC.
+- Daily impressions: The coefficient is −0.689 (p \< 0.001). An additional 1,000 impressions are associated with about \$0.69 lower CPC, after accounting for the other variables.
+- Elapsed days: The coefficient is 0.0012 (p = 0.740). I did not find a statistically significant linear association with time in this model.
+
+These are associations, not causal effects. I cannot conclude that changing an ad's position would directly change CPC by the estimated amount.
+
+## 4. What I would be careful about
+
+This model is a useful example of how to present regression results, but I would not treat it as a complete explanation of the campaign.
+
+First, the export contains 107 reported days, not every calendar day between May and October. Second, the model does not include all the factors that affect ad auctions, such as competition or bidding conditions. Finally, daily records may be related to one another over time, which could affect the statistical tests.
+
+There is also an important difference between advertising activity and new patients. The Google Ads file contains platform metrics, not verified consultation requests. I would need more information before using the regression to recommend changing the campaign.
+
+::: notes
+Explain that the outcome is the advertising cost metric, not consultation intention. The analysis is exploratory and cannot establish cause and effect.
+:::
+
+## What I am taking away from M08
+
+The most useful part of this module was seeing how a table can be built directly from the analysis. With `tbl_cross()`, I could show the GA4 counts and the test in one place. With `tbl_regression()`, I could turn the coefficients from `lm()` into a table that someone unfamiliar with R could read.
+
+I also learned that I need to make decisions *before* formatting: which variables belong in the analysis, what test is appropriate, and what the data actually represent. In our CEP project, this is especially important because we have website and advertising data now, but not the consumer survey responses we originally planned to analyze.
+
+## Appendix
+
+- GitHub repository
+
+- GitHub Pages
