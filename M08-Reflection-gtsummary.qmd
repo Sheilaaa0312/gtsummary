@@ -96,7 +96,7 @@ The biggest benefit for me is having more time to explain what the results mean,
 > **Essay Prompt 2.1.** In Step 2, you watched the extended presentation of the `{gtsummary}` package by Dr. Daniel Sjoberg, the creator of the package. How does it differ from `gt` and `gtExtras`?
 
 | Package | What I would use it for |
-|:---|:---|
+|:-----------------------------------|:-----------------------------------|
 | **`gtsummary`** | Creating descriptive statistics, cross-tabulations, hypothesis-test results, and regression tables directly from data or fitted models. |
 | **`gt`** | Formatting a table, such as adjusting its headings, column layout, and appearance. |
 | **`gtExtras`** | Adding extra visual elements and styling to a `gt` table. |
@@ -182,7 +182,7 @@ ga4_sessions |>
   bold_labels()
 ```
 
-The table shows **counts and row percentages**, so each medium's percentages add to 100%. The `add_p()` function reports the chi-square p-value. I used the version without the continuity correction and checked that the expected cell counts were above five.
+The table shows counts and row percentages, so each medium's percentages add to 100%. The `add_p()` function reports the chi-square p-value. I used the version without the continuity correction and checked that the expected cell counts were above five.
 
 ## 3. What the GA4 results tell me
 
@@ -280,10 +280,6 @@ First, the export contains 107 reported days, not every calendar day between May
 
 There is also an important difference between advertising activity and new patients. The Google Ads file contains platform metrics, not verified consultation requests. I would need more information before using the regression to recommend changing the campaign.
 
-::: notes
-Explain that the outcome is the advertising cost metric, not consultation intention. The analysis is exploratory and cannot establish cause and effect.
-:::
-
 ## What I am taking away from M08
 
 The most useful part of this module was seeing how a table can be built directly from the analysis. With `tbl_cross()`, I could show the GA4 counts and the test in one place. With `tbl_regression()`, I could turn the coefficients from `lm()` into a table that someone unfamiliar with R could read.
@@ -292,6 +288,6 @@ I also learned that I need to make decisions *before* formatting: which variable
 
 ## Appendix
 
-- GitHub repository
+- [GitHub repository](https://github.com/Sheilaaa0312/gtsummary)
 
-- GitHub Pages
+- [GitHub Pages](https://sheilaaa0312.github.io/gtsummary/M08-Reflection-gtsummary.html#/title-slide)
